@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package carrental;
+
+service CarRental {
+  rpc add_car (AddCarRequest) returns (AddCarResponse);
+  rpc create_users (stream User) returns (CreateUsersResponse);
+  rpc update_car (UpdateCarRequest) returns (UpdateCarResponse);
+  rpc remove_car (RemoveCarRequest) returns (RemoveCarResponse);
+  rpc list_available_cars (ListAvailableRequest) returns (stream Car);
+  rpc search_car (SearchCarRequest) returns (SearchCarResponse);
+  rpc add_to_cart (AddToCartRequest) returns (AddToCartResponse);
+  rpc place_reservation (PlaceReservationRequest) returns (PlaceReservationResponse);
+  rpc list_all_reservations (ListAllReservationsRequest) returns (ListAllReservationsResponse);
+}
+
+message Car {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+  double daily_price = 4;
+  int64 mileage = 5;
+  string plate = 6;
+  string status = 7; // AVAILABLE / UNAVAILABLE
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string role = 3; // ADMIN / CUSTOMER
+}
+
+message Reservation {
+  string user_id = 1;
+  string plate = 2;
+  string start_date = 3;
+  string end_date = 4;
+  double price = 5;
+}
+
+message AddCarRequest { Car car = 1; }
+message AddCarResponse { string plate = 1; }
+
+message CreateUsersResponse { int32 count = 1; }
+
+message UpdateCarRequest { string plate = 1; Car car = 2; }
+message UpdateCarResponse { bool success = 1; }
+
+message RemoveCarRequest { string plate = 1; }
+message RemoveCarResponse { repeated Car cars = 1; }
+
+message ListAvailableRequest { string filter = 1; }
+
+message SearchCarRequest { string plate = 1; }
+message SearchCarResponse { bool available = 1; Car car = 2; }
+
+message AddToCartRequest {
+  string user_id = 1;
+  string plate = 2;
+  string start_date = 3;
+  string end_date = 4;
+}
+message AddToCartResponse { bool success = 1; }
+
+message PlaceReservationRequest { string user_id = 1; }
+message PlaceReservationResponse {
+  bool success = 1;
+  repeated Reservation reservations = 2;
+}
+
+message ListAllReservationsRequest {}
+message ListAllReservationsResponse { repeated Reservation reservations = 1; }

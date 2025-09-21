@@ -1,0 +1,15 @@
+syntax = "proto3";
+package carrental;
+
+service CarRental {
+  rpc add_car(AddCarRequest) returns (AddCarResponse);
+}
+
+message AddCarRequest {
+  string make = 1;
+  string model = 2;
+}
+
+message AddCarResponse {
+  string plate = 1;
+}
